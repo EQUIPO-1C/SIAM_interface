@@ -7,7 +7,6 @@ const axios = require("axios");
 
 app.set('port',8000)
 
-const endpoint = "http://localhost:5000/graphql";
 const headers = {
 	"content-type": "application/json",
     "Authorization": "<token>"
@@ -66,7 +65,7 @@ var myService = {
             getAsignaturas: async function() {                
                 var result = {}
                 await axios({
-                    url: endpoint,
+                    url: 'http://siam_proxy:80/graphql',
                     method: 'post',
                     headers: headers,
                     data: {query: graphqlQuery}
