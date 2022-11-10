@@ -123,23 +123,19 @@ app.use(parser.raw({type: function(){return true;}, limit: '5mb'}));
 
 
 //Consumo de la interface del equipo 1B
-app.get("/consumo1B/asignaturas",(request,response)=>{
+app.get("/consumo1B/carreras",(request,response)=>{
     var url = require('fs').readFileSync('ip.txt', 'utf8');
-    var args = {name: 'value'};    
+    var args = {name: 'value'};   
     
-    soap.createClient(url, {},(err, client)=>{
-        //console.log(client)
+    soap.createClient(url, {}, function(err, client) {
+        if(err) response.status(400).send(err)
         try{
-            client.getAsignaturas(args, function (err, result) {
-                console.log("resultados de la consulta");
+            client.getCareers({}, function(err, result) {
+                if(err) response.status(400).send(err)
                 console.log(result);
                 response.status(200).send(result)
             });
-        }
-        catch(error){
-            console.log(error)
-            response.status(400).send(error)
-        }
+        }catch(err){console.log(err)}
     });
     /*
     var result = {}

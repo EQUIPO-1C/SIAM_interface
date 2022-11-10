@@ -1,1 +1,1 @@
-https://a16f-186-154-34-185.ngrok.io/asignaturas?wsdl
+https://8ad1-168-176-40-164.ngrok.io/ws/getCareers.wsdl

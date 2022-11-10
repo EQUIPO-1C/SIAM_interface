@@ -8,6 +8,6 @@ COPY package.json /siam_interface/
 RUN npm install
 
 # Bundle app source
-COPY . /siam_interface//
+COPY . /siam_interface/
 
 CMD [ "npm", "run", "server" ]
