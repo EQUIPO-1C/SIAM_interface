@@ -1,42 +1,90 @@
 <definitions name = "MyService"
-   targetNamespace = "http://www.examples.com/wsdl/MyService.wsdl"
+   targetNamespace = "http://localhost:8000/myservice.wsdl"
    xmlns = "http://schemas.xmlsoap.org/wsdl/"
    xmlns:soap = "http://schemas.xmlsoap.org/wsdl/soap/"
-   xmlns:tns = "http://www.examples.com/wsdl/MyService.wsdl"
-   xmlns:xsd = "http://www.w3.org/2001/XMLSchema">
+   xmlns:tns = "http://localhost:8000/myservice.wsdl"
+   xmlns:xsd = "http://www.w3.org/2001/XMLSchema"
+   xmlns:xsd1 = "http://localhost:8000/stockquote.xsd">
 
-   <message name = "MyFunctionRequest">
+   <types>
+      <schema targetNamespace = "http://localhost:8000/stockquote.xsd" xmlns = "http://www.w3.org/2001/XMLSchema">             
+           
+         <element name = "allAsignaturas">
+            <complexType>
+               <sequence minOccurs="0" maxOccurs="unbounded">
+                  <element name = "asignatura">
+                     <complexType>
+                        <all>
+                           <element name = "codigoasignatura" type = "xsd:int"/>
+                           <element name = "nombreAsignatura" type = "xsd:string"/>
+                           <element name = "idProfesor" type = "xsd:int"/>
+                           <element name = "profesor">
+                              <complexType>
+                                 <element name = "primerNombre" type = "xds:string"/>
+                                 <element name = "segundoNombre" type = "xds:string"/>
+                                 <element name = "primerApellido" type = "xds:string"/>
+                                 <element name = "segundoApellido" type = "xds:string"/>
+                              </complexType>
+                           </element>
+                           <element name = "idEdificio" type = "xsd:int"/>
+                           <element name = "programa">
+                              <complexType>
+                                 <sequence minOccurs="0" maxOccurs="unbounded">
+                                    <element name = "string" type = "xsd:string"/>
+                                 </sequence>
+                              </complexType>
+                           </element>
+                           <element name = "creditos" type = "xsd:int"/>
+                           <element name = "cupos" type = "xsd:int"/>
+                           <element name = "descripcion" type = "xsd:string"/>
+                           <element name = "fechaInicio" type = "xsd:string"/>
+                           <element name = "fechaFinal" type = "xsd:string"/>
+                           <element name = "horario" type = "xsd:string"/>
+                           <element name = "jornada" type = "xsd:string"/>
+                           <element name = "nivelDeEstudio" type = "xsd:string"/>
+                           <element name = "sede" type = "xsd:string"/>
+                           <element name = "tipologia" type = "xsd:string"/>
+                        </all>
+                     </complexType>
+                  </element>
+               </sequence>
+            </complexType>
+         </element> 
+
+      </schema>
+   </types>
+   <message name = "asignaturaRequest">
       <part name = "testParam" type = "xsd:string"/>
    </message>
-   <message name = "MyFunctionResponse">
-      <part name = "status" type = "xsd:string"/>
+   <message name = "asignaturaResponse">      
+      <part name = "asignaturas" type = "xsd1:allAsignaturas"/>
    </message>
    <portType name = "MyPort">
-      <operation name = "MyFunction">
-         <input message = "tns:MyFunctionRequest"/>
-         <output message = "tns:MyFunctionResponse"/>
+      <operation name = "getAsignaturas">
+         <input message = "tns:asignaturaRequest"/>
+         <output message = "tns:asignaturaResponse"/>
       </operation>
    </portType>
 
-   <binding name = "MyFunction_Binding" type = "tns:MyPort">
+   <binding name = "Binding" type = "tns:MyPort">
       <soap:binding style = "rpc"
          transport = "http://schemas.xmlsoap.org/soap/http"/>
-      <operation name = "MyFunction">
-         <soap:operation soapAction = "MyFunction"/>
+      <operation name = "getAsignaturas">
+         <soap:operation soapAction = "getAsignaturas"/>
          <input>
-            <soap:body encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/" namespace = "urn:examples:MyService" use = "encoded"/>
+            <soap:body encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/" namespace = "urn:localhost:myservice" use = "encoded"/>
          </input>
          <output>
-            <soap:body encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/" namespace = "urn:examples:MyService" use = "encoded"/>
+            <soap:body encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/" namespace = "urn:localhost:myservice" use = "encoded"/>
          </output>
       </operation>
    </binding>
 
    <service name = "MyService">
-      <documentation>WSDL File for MyService</documentation>
-      <port binding = "tns:MyFunction_Binding" name = "MyPort">
+      <documentation>servicio expuesto al equipo 1D</documentation>
+      <port binding = "tns:Binding" name = "MyPort">
          <soap:address
-            location = "http://www.examples.com/MyFunction/" />
+            location = "http://localhost:8000/asignaturas" />
       </port>
    </service>
 

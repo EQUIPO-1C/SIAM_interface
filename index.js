@@ -5,7 +5,7 @@ const parser = require('body-parser')
 const soap = require('soap')
 const axios = require("axios");
 
-app.set('port',6000)
+app.set('port',8000)
 
 const endpoint = "http://localhost:5000/graphql";
 const headers = {
@@ -17,9 +17,15 @@ const graphqlQuery = `query{
             codigoasignatura
             nombreAsignatura
             idProfesor
+            profesor{
+                primerNombre
+                segundoNombre
+                primerApellido
+                segundoApellido
+            }
             idEdificio
-            programa
             creditos
+            programa
             cupos
             descripcion
             fechaInicio
@@ -57,8 +63,7 @@ app.post("/xml/asignatura",xmlparser({trim:false,explicitArray:false}),function(
 var myService = {
     MyService: {
         MyPort: {
-            MyFunction: async function(args) {
-                console.log('my function ' + args)
+            getAsignaturas: async function() {                
                 var result = {}
                 await axios({
                     url: endpoint,
@@ -66,9 +71,9 @@ var myService = {
                     headers: headers,
                     data: {query: graphqlQuery}
                 }).then((data)=>result=data.data.data);
-                console.log(args)
+                console.log(result)
                 return {
-                    name: result
+                    asignaturas: result.allAsignaturas
                 };
             },
 
@@ -118,15 +123,21 @@ app.use(parser.raw({type: function(){return true;}, limit: '5mb'}));
 
 
 //Consumo de la interface del equipo 1B
-app.post("/consumo1B/asignaturas",async function (request,response){
-    /*var url = 'http://example.com/wsdl?wsdl';
-    var args = {name: 'value'};
-
+app.get("/consumo1B/carreras",(request,response)=>{
+    var url = require('fs').readFileSync('ip.txt', 'utf8');
+    var args = {name: 'value'};   
+    
     soap.createClient(url, {}, function(err, client) {
-        client.MyFunction(args, function(err, result) {
-            console.log(result);
-        });
+        if(err) response.status(400).send(err)
+        try{
+            client.getCareers({}, function(err, result) {
+                if(err) response.status(400).send(err)
+                console.log(result);
+                response.status(200).send(result)
+            });
+        }catch(err){console.log(err)}
     });
+    /*
     var result = {}
     await axios({
         url: endpoint,
@@ -137,9 +148,7 @@ app.post("/consumo1B/asignaturas",async function (request,response){
             variables: request
         }
     }).then((data)=>result=data.data);
-    var asg = xml2json.js2xml(result,{compact:true, spaces: 4})
-    */
-    response.status(200).send("consumo exitoso")
+    var asg = xml2json.js2xml(result,{compact:true, spaces: 4})*/
 })
 
 
