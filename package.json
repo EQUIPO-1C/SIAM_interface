@@ -21,6 +21,7 @@
     "graphql-request": "^5.0.0",
     "prompt-sync": "^4.2.0",
     "soap": "^0.45.0",
+    "strong-soap": "^3.4.1",
     "xml-js": "^1.6.11",
     "xml2js": "^0.4.23"
   },

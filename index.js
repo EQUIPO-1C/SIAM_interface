@@ -3,6 +3,7 @@ const app = express();
 const xmlparser = require('express-xml-bodyparser')
 const parser = require('body-parser')
 const soap = require('soap')
+const soapClient = require("strong-soap").soap
 const axios = require("axios");
 
 app.set('port',8000)
@@ -126,7 +127,7 @@ app.get("/consumo1B/carreras",(request,response)=>{
     var url = require('fs').readFileSync('ip.txt', 'utf8');
     var args = {name: 'value'};   
     
-    soap.createClient(url, {}, function(err, client) {
+    soapClient.createClient(url, {}, function(err, client) {
         if(err) response.status(400).send(err)
         try{
             client.getCareers({}, function(err, result) {
